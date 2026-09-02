@@ -58,7 +58,13 @@ fi
 # ---- build locally ------------------------------------------------------------
 info "Building locally (pnpm -r build)"
 pnpm install --frozen-lockfile
-pnpm -r build
+# Next inlines NEXT_PUBLIC_* at BUILD time, and this build runs on a dev
+# machine — so a developer's apps/web/.env.local (pointing at localhost:4001
+# for `pnpm dev`) would otherwise be compiled straight into the production
+# bundle. A real environment variable outranks every .env file in Next, so
+# pinning it here makes the production build immune to local dev config.
+# In production nginx serves both apps from one origin, so "/api" is correct.
+NEXT_PUBLIC_API_URL="/api" pnpm -r build
 [[ -f apps/api/dist/main.js ]] \
   || die "API build missing: apps/api/dist/main.js"
 [[ -f apps/web/.next/standalone/apps/web/server.js ]] \
