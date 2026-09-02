@@ -1,0 +1,13 @@
+{
+  "name": "assignment",
+  "private": true,
+  "packageManager": "pnpm@10.30.3",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "web:dev": "pnpm --filter @assignment/web dev",
+    "api:dev": "pnpm --filter @assignment/api dev",
+    "lint": "pnpm -r lint",
+    "deploy": "./deploy.sh"
+  }
+}
