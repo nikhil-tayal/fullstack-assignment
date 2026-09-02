@@ -47,6 +47,18 @@
 }
 
 @layer components {
+  /*
+   * The page measure. The header and every page share it, so a page's content
+   * lines up with the brand and nav above it rather than jutting past them —
+   * which is what happened while the shell and the wider pages each carried
+   * their own max-width. One definition, so the two cannot drift apart again.
+   */
+  .shell {
+    margin-inline: auto;
+    max-width: 72rem;
+    padding-inline: 1.5rem;
+  }
+
   /* Labels are a fixed treatment in the design, not a set of loose utilities —
      naming it once keeps every label in the product identical. */
   .label {

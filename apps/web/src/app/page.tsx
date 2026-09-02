@@ -2,7 +2,7 @@ import { UploadForm } from '@/components/upload/upload-form';
 
 export default function UploadPage() {
   return (
-    <main className="mx-auto max-w-5xl px-6 py-10">
+    <main className="shell py-10">
       <header className="max-w-2xl">
         <h1 className="font-display text-title tracking-tight">Upload the registry</h1>
         <p className="mt-2 text-ink-soft">

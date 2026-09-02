@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!--
+    The standing seal, reduced until only what survives at 16px is left: the
+    outer ring, the arc that runs down as a filing date approaches, and the
+    notched centre. No lettering — at favicon size it would be a smudge.
+  -->
+  <circle cx="16" cy="16" r="14" fill="#1e5c46" />
+  <circle cx="16" cy="16" r="11.25" fill="none" stroke="#f7f7f4" stroke-width="1" opacity="0.55" />
+  <path
+    d="M16 6.75a9.25 9.25 0 0 1 0 18.5"
+    fill="none"
+    stroke="#f7f7f4"
+    stroke-width="2.75"
+    stroke-linecap="round"
+  />
+  <circle cx="16" cy="16" r="3.25" fill="#f7f7f4" />
+</svg>

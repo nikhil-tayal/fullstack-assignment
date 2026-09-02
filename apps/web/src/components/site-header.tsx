@@ -14,7 +14,7 @@ export function SiteHeader() {
 
   return (
     <header className="border-b border-rule bg-surface">
-      <div className="mx-auto flex max-w-5xl flex-wrap items-baseline gap-x-8 gap-y-2 px-6 py-4">
+      <div className="shell flex flex-wrap items-baseline gap-x-8 gap-y-2 py-4">
         <Link href="/" className="font-display text-heading tracking-tight text-ink">
           Entity Registry
         </Link>

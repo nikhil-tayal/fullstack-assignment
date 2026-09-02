@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { BarRows, COMPLIANCE_COLOUR, Legend, StackedBar, neutral } from '@/components/analytics/charts';
+import { SortableGrid } from '@/components/analytics/sortable-grid';
 import { EmptyState } from '@/components/empty-state';
 import { FilterBar } from '@/components/filter-bar';
-import { Panel } from '@/components/panel';
 import { withQuery } from '@/lib/api';
 import { useApi } from '@/lib/use-api';
 import {
@@ -102,43 +102,53 @@ export default function AnalyticsPage() {
         parent&rsquo;s whole holding.
       </FilterBar>
 
-      <div // items-start so a short chart is a short panel: stretching one to match its
-        // neighbour just adds empty frame under it.
-        className={`mt-6 grid items-start gap-6 lg:grid-cols-2 ${loading ? 'opacity-50' : ''}`}>
-        <Panel title="Compliance standing">
-          <Compliance rows={data.complianceBreakdown} />
-        </Panel>
-
-        <Panel title="Entity status by region">
-          <ByRegion regions={data.entityStatusByRegion} />
-        </Panel>
-
-        <Panel title="What hangs off each top-level entity">
-          <Composition rows={data.compositionByTopLevel} />
-        </Panel>
-
-        <Panel
-          title="Ownership split"
-          action={
-            data.parentOptions.length > 0 && (
-              <select
-                aria-label="Parent entity"
-                value={parent}
-                onChange={(event) => setParent(event.target.value)}
-                className="max-w-[14rem] border-b border-rule bg-transparent pb-0.5 text-meta text-ink focus:border-seal focus:outline-none"
-              >
-                <option value="">Choose a parent</option>
-                {data.parentOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            )
-          }
-        >
-          <Split split={data.ownershipSplit} hasParents={data.parentOptions.length > 0} />
-        </Panel>
+      <div className="mt-6">
+        <SortableGrid
+          storageKey="analytics-chart-order"
+          // items-start so a short chart is a short panel: stretching one to match its
+          // neighbour just adds empty frame under it.
+          className={`grid items-start gap-6 lg:grid-cols-2 ${loading ? 'opacity-50' : ''}`}
+          items={[
+            {
+              // These ids are persisted in the reader's browser: never rename them.
+              id: 'compliance',
+              title: 'Compliance standing',
+              content: <Compliance rows={data.complianceBreakdown} />,
+            },
+            {
+              id: 'region',
+              title: 'Entity status by region',
+              content: <ByRegion regions={data.entityStatusByRegion} />,
+            },
+            {
+              id: 'composition',
+              title: 'What hangs off each top-level entity',
+              content: <Composition rows={data.compositionByTopLevel} />,
+            },
+            {
+              id: 'ownership',
+              title: 'Ownership split',
+              action: data.parentOptions.length > 0 && (
+                <select
+                  aria-label="Parent entity"
+                  value={parent}
+                  onChange={(event) => setParent(event.target.value)}
+                  className="max-w-[14rem] border-b border-rule bg-transparent pb-0.5 text-meta text-ink focus:border-seal focus:outline-none"
+                >
+                  <option value="">Choose a parent</option>
+                  {data.parentOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              ),
+              content: (
+                <Split split={data.ownershipSplit} hasParents={data.parentOptions.length > 0} />
+              ),
+            },
+          ]}
+        />
       </div>
     </Shell>
   );
@@ -146,7 +156,7 @@ export default function AnalyticsPage() {
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10">
+    <main className="shell py-10">
       <header className="max-w-2xl">
         <h1 className="font-display text-title tracking-tight">Analytics</h1>
         <p className="mt-2 text-ink-soft">

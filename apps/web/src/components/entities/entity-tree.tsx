@@ -31,6 +31,10 @@ export function EntityTree({
   filtered: boolean;
 }) {
   const [overrides, setOverrides] = useState<Record<string, boolean>>({});
+  // Null means "use each row's own default". Collapse all / expand all replace
+  // that default outright rather than writing an entry per path, so the answer
+  // stays right for rows that are not on screen yet.
+  const [baseline, setBaseline] = useState<boolean | null>(null);
 
   // A new result set is a new set of paths; carrying the old overrides across
   // would leave rows open or shut for reasons the reader cannot see.
@@ -39,23 +43,44 @@ export function EntityTree({
   if (seen !== signature) {
     setSeen(signature);
     setOverrides({});
+    setBaseline(null);
   }
 
-  const rows = flatten(nodes, filtered, overrides);
+  const rows = flatten(nodes, filtered, overrides, baseline);
+  const branches = rows.filter((row) => row.hasChildren);
+  const anyOpen = branches.some((row) => row.open);
+
+  const setAll = (open: boolean) => {
+    setOverrides({});
+    setBaseline(open);
+  };
 
   return (
-    <div role="tree" aria-label="Entity hierarchy" className="border-t border-rule">
-      {rows.map((row, index) => (
-        <EntityRow
-          key={row.path}
-          row={row}
-          delayMs={index < MAX_STAGGERED_ROWS ? index * STAGGER_MS : 0}
-          onToggle={() =>
-            setOverrides((current) => ({ ...current, [row.path]: !row.open }))
-          }
-        />
-      ))}
-    </div>
+    <>
+      {branches.length > 0 && (
+        <div className="flex justify-end pb-2">
+          <button
+            type="button"
+            onClick={() => setAll(!anyOpen)}
+            className="text-meta text-seal underline decoration-rule underline-offset-4 hover:decoration-seal"
+          >
+            {anyOpen ? 'Collapse all' : 'Expand all'}
+          </button>
+        </div>
+      )}
+      <div role="tree" aria-label="Entity hierarchy" className="border-t border-rule">
+        {rows.map((row, index) => (
+          <EntityRow
+            key={row.path}
+            row={row}
+            delayMs={index < MAX_STAGGERED_ROWS ? index * STAGGER_MS : 0}
+            onToggle={() =>
+              setOverrides((current) => ({ ...current, [row.path]: !row.open }))
+            }
+          />
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -80,6 +105,7 @@ function flatten(
   nodes: EntityNode[],
   filtered: boolean,
   overrides: Record<string, boolean>,
+  baseline: boolean | null,
   parentPath = '',
   depth = 0,
 ): Row[] {
@@ -92,14 +118,14 @@ function flatten(
     // Filtered results are pruned to matches and their ancestors, so anything
     // still on screen earns its place and starts open. Unfiltered, only the
     // top level is open: the group is the thing to survey first.
-    const open = overrides[path] ?? (filtered || depth === 0);
+    const open = overrides[path] ?? baseline ?? (filtered || depth === 0);
 
     rows.push({ node, path, depth, open, hasChildren, isFq: node.registrationType === 'FQ' });
 
     if (open && hasChildren) {
       rows.push(
-        ...flatten(node.foreignQualifications, filtered, overrides, path, depth + 1),
-        ...flatten(node.subsidiaries, filtered, overrides, path, depth + 1),
+        ...flatten(node.foreignQualifications, filtered, overrides, baseline, path, depth + 1),
+        ...flatten(node.subsidiaries, filtered, overrides, baseline, path, depth + 1),
       );
     }
   }
@@ -154,6 +180,7 @@ function EntityRow({
           <div className="flex flex-wrap items-baseline gap-x-3">
             <span className="truncate text-body text-ink">{node.name}</span>
             <Attribution node={node} isFq={isFq} />
+            <Holdings node={node} />
           </div>
           <p className="mt-0.5 text-meta text-ink-soft">
             {node.jurisdiction}
@@ -165,6 +192,19 @@ function EntityRow({
                 <span className="font-mono">{node.businessId}</span>
               </>
             )}
+          </p>
+          {/*
+           * Narrow viewports drop the status pill and the Next filing column for
+           * width. Both are facts the row exists to carry, so they ride along here
+           * instead — each shown only where its own column is not.
+           */}
+          <p className="mt-0.5 text-meta text-ink-soft md:hidden">
+            <span className="sm:hidden">
+              {node.entityStatus}
+              <span className="text-ink-faint"> · </span>
+            </span>
+            Next filing{' '}
+            <span className="font-mono text-ink">{node.nextFilingDueDate ?? '—'}</span>
           </p>
         </div>
 
@@ -225,6 +265,28 @@ function Attribution({ node, isFq }: { node: EntityNode; isFq: boolean }) {
       {formatPercent(node.ownershipPercent)}
     </span>
   );
+}
+
+/**
+ * What a collapsed row is hiding. Without it the caret is the only clue that a
+ * row has anything under it, and no clue at all as to how much — so the reader
+ * has to open every row to find out which ones were worth opening.
+ *
+ * Subsidiaries and foreign qualifications are counted apart, because they are
+ * different things: one is a company this entity owns part of, the other is
+ * this same entity registered again somewhere else.
+ */
+function Holdings({ node }: { node: EntityNode }) {
+  const parts: string[] = [];
+  if (node.subsidiaryCount > 0) {
+    parts.push(`${node.subsidiaryCount} ${node.subsidiaryCount === 1 ? 'subsidiary' : 'subsidiaries'}`);
+  }
+  if (node.fqCount > 0) {
+    parts.push(`${node.fqCount} FQ${node.fqCount === 1 ? '' : 's'}`);
+  }
+  if (parts.length === 0) return null;
+
+  return <span className="text-meta text-ink-faint">{parts.join(' · ')}</span>;
 }
 
 /** Trailing zeros are noise on a whole number and precision on a fractional one. */

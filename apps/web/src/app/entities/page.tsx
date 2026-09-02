@@ -23,7 +23,7 @@ export default function EntitiesPage() {
   const active = Boolean(settledSearch) || Object.values(filters).some(Boolean);
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10">
+    <main className="shell py-10">
       <header className="max-w-2xl">
         <h1 className="font-display text-title tracking-tight">The registry</h1>
         <p className="mt-2 text-ink-soft">
@@ -118,10 +118,16 @@ function Summary({ data, active }: { data: EntitiesResponse; active: boolean }) 
   if (entities === 0) return null;
 
   return active ? (
-    <>
-      <span className="font-mono text-ink">{shown}</span> matching, shown with the parents they
-      sit under.
-    </>
+    shown === 0 ? (
+      // The "with the parents they sit under" clause describes rows that are not
+      // there when nothing matched; the empty state below carries the message instead.
+      <>No matches.</>
+    ) : (
+      <>
+        <span className="font-mono text-ink">{shown}</span> matching, shown with the parents they
+        sit under.
+      </>
+    )
   ) : (
     <>
       <span className="font-mono text-ink">{entities}</span> entities under{' '}
