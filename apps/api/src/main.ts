@@ -11,10 +11,12 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   // In production the browser only ever talks to the same origin (nginx
-  // proxies /api), so CORS matters solely for `pnpm dev`, where Next runs
-  // on :3000 and this on :4001.
-  const origins = process.env.CORS_ORIGIN?.split(',').map((o) => o.trim());
-  app.enableCors({ origin: origins ?? ['http://localhost:3000'] });
+  // proxies /api), so CORS matters solely for `pnpm dev`.
+  // CORS_ORIGIN pins the allowed origins wherever that matters. Unset, this is a
+  // developer machine, where the dev server's port is whatever was free — so any
+  // loopback origin is allowed rather than one hardcoded port that goes stale.
+  const configured = process.env.CORS_ORIGIN?.split(',').map((o) => o.trim());
+  app.enableCors({ origin: configured ?? /^http:\/\/(localhost|127\.0\.0\.1):\d+$/ });
 
   const port = Number(process.env.PORT ?? 4001);
   await app.listen(port, '127.0.0.1');
