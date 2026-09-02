@@ -40,9 +40,22 @@ been fixed — see [What was changed after the run](#what-was-changed-after-the-
 |---|---|---|---|
 | 5 | All three pages state emptiness and point onward | **PASS** | "No registry yet" + next action on `/entities` and `/analytics`; `/` is itself the next action. No spinner, no axes drawn around zero, and a scripted scan found no `NaN`/`undefined`/`0%` |
 
-![Empty upload page](./screens/05-empty-upload.png)
-![Empty entities page](./screens/05-empty-entities.png)
-![Empty analytics page](./screens/05-empty-analytics.png)
+<table>
+<tr>
+<td width="33%" valign="top">
+  <img src="./screens/05-empty-upload.png" alt="Upload" width="100%">
+  <p align="center"><sub>Upload</sub></p>
+</td>
+<td width="33%" valign="top">
+  <img src="./screens/05-empty-entities.png" alt="Entities" width="100%">
+  <p align="center"><sub>Entities</sub></p>
+</td>
+<td width="33%" valign="top">
+  <img src="./screens/05-empty-analytics.png" alt="Analytics" width="100%">
+  <p align="center"><sub>Analytics</sub></p>
+</td>
+</tr>
+</table>
 
 ### 2. The happy path
 
@@ -52,8 +65,18 @@ been fixed — see [What was changed after the run](#what-was-changed-after-the-
 | 7 | Re-upload identical → `changed: false` | **PASS** | `{"changed":false,"message":"These files match what is already stored, so nothing changed."}`; UI reads **NO CHANGE**; status counts unmoved — no duplication |
 | 8 | Upload `demo/` replaces, not appends | **PASS** | Status became **32 / 26 / 36** — not 37. Wholesale replace confirmed |
 
-![Upload accepted](./screens/06-upload-success.png)
-![Identical re-upload reported as no change](./screens/07-reupload-unchanged.png)
+<table>
+<tr>
+<td width="50%" valign="top">
+  <img src="./screens/06-upload-success.png" alt="Upload accepted" width="100%">
+  <p align="center"><sub>Upload accepted</sub></p>
+</td>
+<td width="50%" valign="top">
+  <img src="./screens/07-reupload-unchanged.png" alt="Identical re-upload — no change" width="100%">
+  <p align="center"><sub>Identical re-upload — no change</sub></p>
+</td>
+</tr>
+</table>
 
 ### 3. Error reporting
 
@@ -119,8 +142,18 @@ The live data lands on the boundaries too, not just the unit tests: +89 → `FIL
 | 30 | Empty result is about the filters | **PASS** | *"Nothing matches these filters — No entity in the registry meets all of them at once."* Distinct from the empty-registry message |
 | 31 | Options are real and not cross-narrowed | **PASS** | Options diff **identical** to the distinct CSV column values; applying a search left all 26 jurisdictions selectable |
 
-![Search keeps ancestors as context](./screens/28-search-context.png)
-![Filtered to nothing](./screens/30-empty-filter.png)
+<table>
+<tr>
+<td width="50%" valign="top">
+  <img src="./screens/28-search-context.png" alt="Search keeps ancestors as context" width="100%">
+  <p align="center"><sub>Search keeps ancestors as context</sub></p>
+</td>
+<td width="50%" valign="top">
+  <img src="./screens/30-empty-filter.png" alt="Filtered to nothing" width="100%">
+  <p align="center"><sub>Filtered to nothing</sub></p>
+</td>
+</tr>
+</table>
 
 ### 8. Analytics
 
@@ -134,9 +167,22 @@ The live data lands on the boundaries too, not just the unit tests: +89 → `FIL
 | 37 | A genuinely empty chart | **PASS** | Per-chart *"Nothing to measure — No entity matches these filters."* |
 | 38 | No two categories share a colour | **PASS** | Swatches read from computed style: all 7 region colours distinct, all 3 ownership colours distinct |
 
-![Analytics](./screens/32-analytics.png)
-![Ownership split](./screens/35-ownership-split.png)
-![Charts with no data](./screens/37-chart-empty.png)
+<table>
+<tr>
+<td width="33%" valign="top">
+  <img src="./screens/32-analytics.png" alt="Analytics" width="100%">
+  <p align="center"><sub>Analytics</sub></p>
+</td>
+<td width="33%" valign="top">
+  <img src="./screens/35-ownership-split.png" alt="Ownership split" width="100%">
+  <p align="center"><sub>Ownership split</sub></p>
+</td>
+<td width="33%" valign="top">
+  <img src="./screens/37-chart-empty.png" alt="Charts with no data" width="100%">
+  <p align="center"><sub>Charts with no data</sub></p>
+</td>
+</tr>
+</table>
 
 ### 9. Quality floor
 
@@ -149,8 +195,18 @@ The live data lands on the boundaries too, not just the unit tests: +89 → `FIL
 | 43 | Console and network clean | **PASS** | No errors, **no React key warnings, no hydration mismatches**, no failed requests. One DevTools advisory about a form field lacking `id`/`name` |
 | 44 | API down → honest failure | **PASS** | Killed the API, reloaded: *"The registry could not be read — Request failed (500)"* with a **Try again** action. It does not hang and does not claim the registry is empty |
 
-![390px viewport](./screens/39-mobile-entities.png)
-![API unreachable](./screens/44-api-down.png)
+<table>
+<tr>
+<td width="30%" valign="top" align="center">
+  <img src="./screens/39-mobile-entities.png" alt="390px viewport" width="200">
+  <p align="center"><sub>390px viewport, full page — no horizontal scroll, nothing clipped</sub></p>
+</td>
+<td width="70%" valign="top">
+  <img src="./screens/44-api-down.png" alt="API unreachable" width="100%">
+  <p align="center"><sub>API unreachable — an honest failure with a retry</sub></p>
+</td>
+</tr>
+</table>
 
 ### 10. The public link
 

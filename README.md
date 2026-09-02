@@ -9,6 +9,33 @@ files.
 Live: **[assignment.nikhiltayal.info](https://assignment.nikhiltayal.info)** ·
 Source: [github.com/nikhil-tayal/fullstack-assignment](https://github.com/nikhil-tayal/fullstack-assignment)
 
+<p align="center">
+  <img src="./docs/screens/45-deployed-entities.png" alt="The registry hierarchy" width="100%">
+</p>
+
+<table>
+<tr>
+<td width="50%" valign="top">
+  <img src="./docs/screens/05-empty-upload.png" alt="The upload page" width="100%">
+  <p align="center"><sub><b>Upload</b> — three files, one request, one button that waits for all three.</sub></p>
+</td>
+<td width="50%" valign="top">
+  <img src="./docs/screens/35-ownership-split.png" alt="Ownership split" width="100%">
+  <p align="center"><sub><b>Ownership</b> — one bar per child, never one pie across them.</sub></p>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+  <img src="./docs/screens/32-analytics.png" alt="Analytics" width="100%">
+  <p align="center"><sub><b>Analytics</b> — four charts under page-level filters.</sub></p>
+</td>
+<td width="50%" valign="top">
+  <img src="./docs/screens/09-defective-errors.png" alt="The error report" width="100%">
+  <p align="center"><sub><b>Every error at once</b> — grouped by class, ruled Line / Column / What to fix.</sub></p>
+</td>
+</tr>
+</table>
+
 ## Run it
 
 ```bash
