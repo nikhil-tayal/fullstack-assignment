@@ -9,7 +9,6 @@
     "test": "pnpm --filter @assignment/api test",
     "typecheck": "pnpm -r typecheck",
     "web:dev": "pnpm --filter @assignment/web dev",
-    "api:dev": "pnpm --filter @assignment/api dev",
-    "deploy": "./deploy.sh"
+    "api:dev": "pnpm --filter @assignment/api dev"
   }
 }

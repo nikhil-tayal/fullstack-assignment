@@ -174,7 +174,3 @@ apps/
 docs/                  API contract, design direction
 sample-data/           demo, provided, and two fixtures built to be rejected
 ```
-
-## Deploy
-
-See [DEPLOY.md](./DEPLOY.md). Short version: `./deploy.sh`.
