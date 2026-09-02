@@ -46,6 +46,20 @@ To use a different certbot contact email:
 CERTBOT_EMAIL=you@example.com ./deploy.sh
 ```
 
+## The database
+
+The registry is a SQLite file at `/root/assignment/apps/api/prisma/registry.db` on
+the droplet. It is deliberately **not** part of the rsync: a deploy ships code, and
+overwriting the file would throw away whatever was uploaded through the running app.
+
+`deploy.sh` syncs `schema.prisma` and the `migrations/` directory instead, then runs
+`prisma migrate deploy` on the server. That creates the file on a first deploy and is
+a no-op on every later one. `DATABASE_URL` is set in `ecosystem.config.cjs` rather
+than in a `.env` on the box, so pm2 and the migration step cannot drift apart.
+
+To start the deployed registry from scratch, delete that file and restart
+`assignment-api` — the app comes back up empty and says so.
+
 ## Logs / process management
 
 ```

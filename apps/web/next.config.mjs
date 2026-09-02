@@ -11,6 +11,17 @@ const nextConfig = {
   // NEXT_DIST_DIR so the two can run side by side; prod keeps the default
   // .next that deploy.sh expects.
   distDir: process.env.NEXT_DIST_DIR ?? '.next',
+
+  // In dev the browser talks to Next on :3000 while Nest listens on :4001. Rather
+  // than pointing the browser straight at the API — which needs an env file and a
+  // CORS allowance — dev proxies /api through Next, so a fresh clone runs with
+  // nothing to configure and the origin layout matches production, where nginx
+  // serves both halves from one host. NEXT_PUBLIC_API_URL still overrides it.
+  async rewrites() {
+    if (process.env.NODE_ENV !== 'development') return [];
+    const api = process.env.API_PROXY_URL ?? 'http://127.0.0.1:4001';
+    return [{ source: '/api/:path*', destination: `${api}/api/:path*` }];
+  },
 };
 
 export default nextConfig;

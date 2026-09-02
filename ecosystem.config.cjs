@@ -33,6 +33,10 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: "4001",
+        // Absolute on purpose. A relative sqlite path resolves against the
+        // schema's directory, which is fine until something runs from a
+        // different cwd and silently opens a second, empty database.
+        DATABASE_URL: "file:/root/assignment/apps/api/prisma/registry.db",
       },
       node_args: "--max-old-space-size=256",
       max_memory_restart: "300M",

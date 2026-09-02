@@ -3,11 +3,13 @@
   "private": true,
   "packageManager": "pnpm@10.30.3",
   "scripts": {
+    "db:setup": "pnpm --filter @assignment/api db:setup",
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r build",
+    "test": "pnpm --filter @assignment/api test",
+    "typecheck": "pnpm -r typecheck",
     "web:dev": "pnpm --filter @assignment/web dev",
     "api:dev": "pnpm --filter @assignment/api dev",
-    "lint": "pnpm -r lint",
     "deploy": "./deploy.sh"
   }
 }

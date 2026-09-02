@@ -1,6 +1,7 @@
 # API contract
 
-Base URL comes from `NEXT_PUBLIC_API_URL` (local dev: `http://localhost:4001/api`).
+Base URL is `/api`. In development Next proxies that to the Nest process on :4001
+(see `apps/web/next.config.mjs`); `NEXT_PUBLIC_API_URL` overrides it.
 All responses are JSON. Dates are `YYYY-MM-DD` strings, never timestamps — the registry
 deals in calendar days, and a timezone on a filing deadline is a bug waiting to happen.
 
@@ -45,7 +46,7 @@ than claiming an update: "These files match what is already stored, so nothing c
 ```json
 {
   "message": "Nothing was saved. 21 problems need fixing in the files.",
-  "summary": { "total": 21, "byClass": { "structural": 0, "row": 14, "reference": 3, "graph": 4 } },
+  "summary": { "total": 21, "byClass": { "structural": 0, "row": 14, "reference": 4, "graph": 3 } },
   "errors": [
     {
       "file": "entities.csv",

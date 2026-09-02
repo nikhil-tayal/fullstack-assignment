@@ -61,14 +61,32 @@ export async function parseFile(
   try {
     ({ grid, lines } = isXlsx ? await readXlsx(buffer) : readCsv(buffer));
   } catch (cause) {
-    const detail = cause instanceof Error ? cause.message : String(cause);
     return {
       ok: false,
-      errors: [structural(file, `Could not read ${filename}: ${detail}. Re-export the file and upload it again.`)],
+      errors: [
+        structural(file, `Could not read ${filename}: ${readable(cause)}. Re-export the file and upload it again.`),
+      ],
     };
   }
 
   return toRows(file, grid, lines);
+}
+
+/**
+ * The parser quotes the offending text back, which is useful when the file is a
+ * spreadsheet and unreadable when it is not — a binary file misnamed .csv otherwise
+ * spills control bytes into a message a person is meant to act on. So the quoted
+ * fragment is stripped of anything unprintable and cut short; the part that names
+ * the fault is what the reader needs.
+ */
+function readable(cause: unknown): string {
+  const message = cause instanceof Error ? cause.message : String(cause);
+  const printable = message
+    // Control bytes, both as themselves and as the \uXXXX text csv-parse escapes
+    // them into, plus anything else with no glyph.
+    .replace(/\\u[0-9a-fA-F]{4}/g, '')
+    .replace(/[^\p{L}\p{N}\p{P}\p{Z}]/gu, '');
+  return printable.length > 160 ? `${printable.slice(0, 160)}...` : printable;
 }
 
 /**

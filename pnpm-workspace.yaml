@@ -1,2 +1,11 @@
 packages:
   - "apps/*"
+
+# pnpm blocks dependency install scripts by default and prints a warning naming
+# what it skipped. Prisma's are the only ones this project needs — they fetch the
+# query engine binary — so they are allowed by name rather than wholesale, and a
+# fresh `pnpm install` finishes without a warning to interpret.
+onlyBuiltDependencies:
+  - "@prisma/client"
+  - "@prisma/engines"
+  - prisma
