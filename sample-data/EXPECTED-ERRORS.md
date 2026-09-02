@@ -27,10 +27,10 @@ spreadsheet lines, so the header is line 1 and the first data row is line 2.
 |------|--------|-------|----------------|
 | 4 | Ownership % | graph | Harrier Freight LLC is owned 115% in total (60% on line 3, 55% here) |
 | 5 | Child Entity | graph | Harrier Group Inc cannot own itself |
-| 6 | Parent Entity | graph | Cycle: Harrier Group Inc -> Harrier Freight LLC -> Harrier Group Inc |
+| 6 | Child Entity | graph | Cycle: Harrier Group Inc -> Harrier Systems LLC -> Harrier Freight LLC -> Harrier Group Inc |
 | 7 | Child Entity | reference | "Harrier Group Inc (Oregon)" is an FQ and cannot be a Child Entity |
 | 8 | Child Entity | reference | "Harrier Atlantis Ltd" does not exist in entities.csv |
-| 9 | Parent Entity, Child Entity | row | Duplicate pair; already declared on line 2 |
+| 9 | Parent Entity | row | Duplicate pair; already declared on line 2 |
 | 10 | Ownership % | row | Ownership % must be greater than 0 |
 | 11 | Ownership % | row | Ownership % allows at most 2 decimals |
 

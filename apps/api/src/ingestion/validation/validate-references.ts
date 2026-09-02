@@ -99,7 +99,11 @@ export function validateReferences(
         line: entity.line,
         column: 'Domestic Entity',
         class: 'reference',
-        message: `"${target.name}" is itself an FQ (line ${target.line}). Domestic Entity has to name a home registration, so use "${target.domesticEntityName ?? 'the Entity row it qualifies'}" instead`,
+        message: `"${target.name}" is itself an FQ (line ${target.line}). Domestic Entity has to name a home registration, so ${
+          target.domesticEntityName === null
+            ? 'name the entity that row is a foreign qualification of'
+            : `use "${target.domesticEntityName}" instead`
+        }`,
       });
     }
   }
@@ -124,7 +128,11 @@ export function validateReferences(
         line: edge.line,
         column: 'Parent Entity',
         class: 'reference',
-        message: `"${parent.name}" is an FQ (line ${parent.line}) and cannot own anything. It is the same legal entity as "${parent.domesticEntityName}", so record the ownership against "${parent.domesticEntityName}" instead`,
+        message: `"${parent.name}" is an FQ (line ${parent.line}) and cannot own anything. ${
+          parent.domesticEntityName === null
+            ? 'Record the ownership against the entity it is a foreign qualification of instead'
+            : `It is the same legal entity as "${parent.domesticEntityName}", so record the ownership against "${parent.domesticEntityName}" instead`
+        }`,
       });
     }
 
@@ -142,7 +150,11 @@ export function validateReferences(
         line: edge.line,
         column: 'Child Entity',
         class: 'reference',
-        message: `"${child.name}" is an FQ (line ${child.line}) and cannot be owned. It is the same legal entity as "${child.domesticEntityName}" registered in another jurisdiction, not a subsidiary, so remove this row`,
+        message: `"${child.name}" is an FQ (line ${child.line}) and cannot be owned. It is ${
+          child.domesticEntityName === null
+            ? 'one legal entity registered in another jurisdiction'
+            : `the same legal entity as "${child.domesticEntityName}", registered in another jurisdiction`
+        }, not a subsidiary, so remove this row`,
       });
     }
   }
