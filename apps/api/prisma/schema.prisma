@@ -1,0 +1,84 @@
+// Entity Name is the join key across all three source files, so it is the natural
+// key here too — relations reference it directly rather than surrogate ids. That
+// keeps validation errors ("Parent Entity X does not exist") expressible against
+// the same identifier the spreadsheet owner sees.
+
+// No custom `output`: @prisma/client is hoisted to the workspace root by pnpm's
+// node-linker=hoisted, and it resolves the generated client relative to itself.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// One row per accepted upload. Only ever zero or one exists: an upload replaces the
+// whole registry, so this records what the current contents came from. `fingerprint`
+// is a hash of the three files' contents, which lets a re-upload of an identical set
+// be reported as a no-op rather than silently redoing the work.
+model Upload {
+  id          String   @id @default(cuid())
+  fingerprint String
+  createdAt   DateTime @default(now())
+  entityCount Int
+  ownerCount  Int
+  filingCount Int
+}
+
+model Entity {
+  name             String    @id
+  registrationType String // Entity | FQ
+  jurisdiction     String
+  entityType       String
+  entityStatus     String
+  statusDate       DateTime?
+  formationDate    DateTime?
+  businessId       String?
+  globalRegion     String?
+
+  // Set only on FQ rows: the domestic Entity this is a foreign qualification of.
+  // An FQ is the same legal entity in another jurisdiction, so this is emphatically
+  // not ownership and must never be confused with the Ownership table.
+  domesticEntityName String?
+  domesticEntity     Entity?  @relation("ForeignQualification", fields: [domesticEntityName], references: [name], onDelete: Cascade)
+  foreignQualifications Entity[] @relation("ForeignQualification")
+
+  ownedBy  Ownership[] @relation("Child")
+  owns     Ownership[] @relation("Parent")
+  filings  Filing[]
+
+  @@index([registrationType])
+  @@index([domesticEntityName])
+}
+
+// Ownership is a graph, not a parent pointer: a child may have many parents, and the
+// same entity appears as a child under each of them.
+model Ownership {
+  id          String @id @default(cuid())
+  parentName  String
+  childName   String
+  percent     Float
+
+  parent Entity @relation("Parent", fields: [parentName], references: [name], onDelete: Cascade)
+  child  Entity @relation("Child", fields: [childName], references: [name], onDelete: Cascade)
+
+  @@unique([parentName, childName])
+  @@index([childName])
+}
+
+model Filing {
+  id         String    @id @default(cuid())
+  entityName String
+  filingType String
+  jurisdiction String
+  filingAuthority String?
+  dueDate    DateTime
+  filedDate  DateTime?
+  status     String
+
+  entity Entity @relation(fields: [entityName], references: [name], onDelete: Cascade)
+
+  @@index([entityName])
+}

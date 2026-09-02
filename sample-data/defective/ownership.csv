@@ -1,0 +1,11 @@
+Parent Entity,Child Entity,Ownership %
+Harrier Group Inc,Harrier Systems LLC,100
+Harrier Group Inc,Harrier Freight LLC,60
+Harrier Systems LLC,Harrier Freight LLC,55
+Harrier Group Inc,Harrier Group Inc,25
+Harrier Freight LLC,Harrier Group Inc,10
+Harrier Group Inc,Harrier Group Inc (Oregon),50
+Harrier Group Inc,Harrier Atlantis Ltd,30
+Harrier Group Inc,Harrier Systems LLC,100
+Harrier Group Inc,Harrier Nordic AB,0
+Harrier Systems LLC,Harrier Nordic AB,33.333

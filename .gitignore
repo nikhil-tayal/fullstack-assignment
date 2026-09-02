@@ -19,3 +19,7 @@ pnpm-debug.log*
 
 *.tsbuildinfo
 coverage/
+
+# Local SQLite registry — rebuilt from migrations, never shared
+*.db
+*.db-journal

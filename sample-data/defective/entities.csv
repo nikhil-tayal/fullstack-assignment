@@ -1,0 +1,11 @@
+Entity Name,Registration Type,Jurisdiction,Entity Type,Entity Status,Status Date,Domestic Entity,Formation Date,Entity/Business ID,Global Region
+Harrier Group Inc,Entity,United States/Delaware,Corporation,Active,,,2015-02-10,DE-6001234,North America
+Harrier Systems LLC,Entity,United States/Washington,Limited Liability Company,Active,,,2017-05-22,WA-604771223,North America
+Harrier Freight LLC,Entity,United States/Arizona,Limited Liability Company,Dissolved,,,2019-08-14,AZ-L23110458,North America
+Harrier Group Inc (Oregon),FQ,United States/Oregon,Corporation,Active,,,2016-04-01,OR-155201-93,North America
+Harrier Nordic AB,Entity,Sweden,Corporation,Actve,,,2020-10-05,SE-559301-8842,European Economic Area
+Harrier Systems LLC,Entity,United States/Nevada,Corporation,Active,,,2021-01-01,NV-887766,North America
+Harrier Pacific KK,Entity,Japan,Corporation,Active,,,2027-06-01,JP-0104-01-118273,Asia Pacific
+Harrier Systems LLC (Texas),FQ,United States/Texas,Limited Liability Company,Active,,Harrier Group Inc (Oregon),2018-03-11,TX-0802341234,North America
+Harrier Andina SAS,Entity,Colombia,Corporation,Active,,,2022-07-19,DE-6001234,Latin America
+Harrier Baltic OU,Entity,Estonia,Corporation,Dormant,2024-11-30,,2019-02-02,EE-14203311,Atlantic
