@@ -1,22 +1,20 @@
-import { HealthCheck } from '@/components/health-check';
+import { UploadForm } from '@/components/upload/upload-form';
 
-export default function Home() {
+export default function UploadPage() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-2xl flex-col justify-center gap-8 px-6 py-16">
-      <div className="space-y-3">
-        <p className="text-sm font-medium uppercase tracking-widest text-[var(--muted)]">
-          Take-home assignment
+    <main className="mx-auto max-w-5xl px-6 py-10">
+      <header className="max-w-2xl">
+        <h1 className="font-display text-title tracking-tight">Upload the registry</h1>
+        <p className="mt-2 text-ink-soft">
+          Entities, ownership and filings, read and checked together. If anything is wrong,
+          every problem is reported at once with the file, the line and the column, and nothing
+          is stored until they are fixed.
         </p>
-        <h1 className="text-4xl font-semibold tracking-tight">
-          Ready to build.
-        </h1>
-        <p className="text-[var(--muted)]">
-          Next.js on the front, NestJS on the back, both behind nginx on{' '}
-          <span className="font-mono">assignment.nikhiltayal.info</span>.
-        </p>
-      </div>
+      </header>
 
-      <HealthCheck />
+      <div className="mt-8">
+        <UploadForm />
+      </div>
     </main>
   );
 }

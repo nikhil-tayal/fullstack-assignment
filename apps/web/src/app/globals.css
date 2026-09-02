@@ -2,24 +2,79 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * The one place a colour is written down. Every surface, rule and status
+ * elsewhere reaches these through Tailwind tokens (see tailwind.config.ts), so
+ * a hex never appears in a component.
+ *
+ * Dark mode is deliberately absent: this is a document, and documents are light.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #18181b;
-  --muted: #71717a;
-  --border: #e4e4e7;
+  --ink: #141b2e;
+  --ink-soft: #4a5468;
+  --ink-faint: #8992a3;
+  --paper: #f0f2ed;
+  --surface: #fafbf8;
+  --rule: #d3d8ce;
+  --seal: #1e5c46;
+  --seal-deep: #123a2c;
+  --stamp: #93231f;
+  --amber: #a66a12;
+  --slate: #5a6b80;
+  --void: #2b2f38;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0b;
-    --foreground: #fafafa;
-    --muted: #a1a1aa;
-    --border: #27272a;
+@layer base {
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-public-sans), -apple-system, 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  /* Quality floor: one visible focus treatment for every control, not a
+     per-component decision that some component forgets to make. */
+  :focus-visible {
+    outline: 2px solid var(--seal);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--seal);
+    color: var(--surface);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+@layer components {
+  /* Labels are a fixed treatment in the design, not a set of loose utilities —
+     naming it once keeps every label in the product identical. */
+  .label {
+    font-size: 0.75rem;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+}
+
+/*
+ * The seal's arc draws itself once on mount. Driven by CSS rather than React
+ * state so the final offset is what server-rendered HTML already carries: with
+ * JS off, or under reduced motion, the ring is simply there.
+ */
+@keyframes seal-arc-draw {
+  from {
+    stroke-dashoffset: var(--seal-arc-length);
+  }
+}
+
+.seal-arc {
+  animation: seal-arc-draw 400ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seal-arc {
+    animation: none;
+  }
 }
