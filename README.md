@@ -107,8 +107,9 @@ denominator, so a parent holding 60% of one company and 100% of another has not
 allocated 160% of anything. Each bar splits into this parent's stake, stakes other
 parents in the registry hold, and the remainder owned outside it.
 
-The visual language and the standing seal are set out in
-[`docs/DESIGN.md`](./docs/DESIGN.md); the wire contract is in
+A screen-by-screen walkthrough of how the whole thing behaves is in
+[`docs/HOW-IT-WORKS.md`](./docs/HOW-IT-WORKS.md). The visual language and the standing
+seal are set out in [`docs/DESIGN.md`](./docs/DESIGN.md); the wire contract is in
 [`docs/API.md`](./docs/API.md).
 
 ## Stack
