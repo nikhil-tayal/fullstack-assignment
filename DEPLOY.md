@@ -70,3 +70,27 @@ project sharing the box.
   goes down, but the new site config wasn't applied. Fix
   `/etc/nginx/sites-available/assignment` on the box and `nginx -t` it
   manually.
+
+## Source of truth
+
+The code lives at
+[github.com/nikhil-tayal/fullstack-assignment](https://github.com/nikhil-tayal/fullstack-assignment).
+
+The droplet does **not** pull from GitHub. `deploy.sh` builds on your machine and
+rsyncs the artifacts up, because a Next build on this box peaks around 460MB and
+takes ~2m16s — survivable, but uncomfortably close to the limit while easysupply
+and the two app processes are also resident.
+
+The practical consequence: pushing to GitHub and deploying are separate actions.
+`deploy.sh` warns when the working tree is dirty or has unpushed commits, so the
+repo a reviewer reads doesn't silently drift from what's actually running. Push
+first, then deploy.
+
+## Gotcha: NEXT_PUBLIC_* is baked at build time
+
+Next inlines `NEXT_PUBLIC_*` into the client bundle when it builds. Since the
+build happens on a dev machine, a local `apps/web/.env.local` would otherwise be
+compiled into production — which is exactly how the deployed page once ended up
+fetching `localhost:4001/api/health`. `deploy.sh` now pins
+`NEXT_PUBLIC_API_URL=/api` for the production build; a real environment variable
+outranks every `.env` file in Next, so local dev config can no longer leak.

@@ -55,6 +55,20 @@ else
   warn "HTTPS (certbot) will be SKIPPED this run — deploying over HTTP only"
 fi
 
+# ---- git state ----------------------------------------------------------------
+# The GitHub repo is what a reviewer reads, so it must match what is actually
+# running. This only warns — shipping an experiment before pushing it is a
+# legitimate thing to want to do.
+if git rev-parse --git-dir >/dev/null 2>&1; then
+  if [[ -n "$(git status --porcelain)" ]]; then
+    warn "Working tree has uncommitted changes — they WILL be deployed but are not on GitHub"
+  fi
+  if git rev-parse --abbrev-ref --symbolic-full-name '@{u}' >/dev/null 2>&1; then
+    AHEAD="$(git rev-list --count '@{u}..HEAD' 2>/dev/null || echo 0)"
+    [[ "$AHEAD" -gt 0 ]] && warn "$AHEAD local commit(s) not pushed — run 'git push' so GitHub matches the deploy"
+  fi
+fi
+
 # ---- build locally ------------------------------------------------------------
 info "Building locally (pnpm -r build)"
 pnpm install --frozen-lockfile
@@ -64,6 +78,9 @@ pnpm install --frozen-lockfile
 # bundle. A real environment variable outranks every .env file in Next, so
 # pinning it here makes the production build immune to local dev config.
 # In production nginx serves both apps from one origin, so "/api" is correct.
+# A half-written .next (interrupted build, or a `next dev` that clobbered it)
+# makes the standalone copy step fail on a missing manifest. Cheap to avoid.
+rm -rf apps/web/.next apps/api/dist
 NEXT_PUBLIC_API_URL="/api" pnpm -r build
 [[ -f apps/api/dist/main.js ]] \
   || die "API build missing: apps/api/dist/main.js"

@@ -3,6 +3,8 @@
 Take-home assignment scaffold. Next.js front end, NestJS API, deployed to
 [assignment.nikhiltayal.info](https://assignment.nikhiltayal.info).
 
+Source: [github.com/nikhil-tayal/fullstack-assignment](https://github.com/nikhil-tayal/fullstack-assignment)
+
 ## Stack
 
 | Part | Tech | Dev port |
